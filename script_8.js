@@ -1486,6 +1486,52 @@ document.addEventListener("DOMContentLoaded", () => {
   renderBills(); // 新增
 });
 
+// 動態生成 Dashboard 日期選擇器（最近 12 個月，預設當前月）
+function initDashboardDateSelect() {
+  const select = document.getElementById("dashboard-date-select");
+  if (!select) return;
+
+  const today = new Date();
+  const currentYear = today.getFullYear();
+  const currentMonth = today.getMonth(); // 0-11
+
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+
+  select.innerHTML = ""; // 清空
+
+  // 生成最近 12 個月（包含當前月）
+  for (let i = 11; i >= 0; i--) {
+    const date = new Date(currentYear, currentMonth - i, 1);
+    const year = date.getFullYear();
+    const monthIndex = date.getMonth();
+    const monthName = monthNames[monthIndex];
+    const optionText = `${monthName} ${year}`;
+
+    const option = document.createElement("option");
+    option.value = `${year}-${monthIndex + 1}`; // value 用 YYYY-MM 格式，方便後續可能過濾數據
+    option.textContent = optionText;
+
+    // 如果是當前月，設為 selected
+    if (i === 0) {
+      option.selected = true;
+    }
+
+    select.appendChild(option);
+  }
+
+  // 可選：監聽變更事件，未來可用來切換月份數據
+  select.addEventListener("change", () => {
+    console.log("選取的月份:", select.value); // 之後可擴充載入對應月份數據
+    // 例如：loadBudgetForMonth(select.value) 或其他邏輯
+  });
+}
+
+// 在初始化時呼叫
+initDashboardDateSelect();
+
   // ==================== 資料匯出 / 匯入功能 ====================
   const exportBtn = document.getElementById("export-data-btn");
   const importInput = document.getElementById("import-data-input");
@@ -1617,4 +1663,5 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 });
+
 
