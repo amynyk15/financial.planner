@@ -1590,4 +1590,31 @@ document.querySelectorAll('a.show-more[href^="#"]').forEach((link) => {
       console.error(`找不到頁面：${targetId}，請確認 section id 是否正確`);
     }
   });
+
+  // 自動產生 Budget Planner 年份選單（解決年份錯亂問題）
+document.addEventListener('DOMContentLoaded', function() {
+  const yearSelect = document.getElementById('budget-year');
+  if (!yearSelect) return;
+
+  // 清空原有選項（避免重複）
+  yearSelect.innerHTML = '';
+
+  // 以今年為基準，前後各加 5 年（可自行調整）
+  const currentYear = new Date().getFullYear(); // 自動取得目前年份（2025）
+  const startYear = currentYear - 5;
+  const endYear = currentYear + 5;
+
+  // 從新到舊加入選項（最新年在最上面）
+  for (let year = endYear; year >= startYear; year--) {
+    const option = document.createElement('option');
+    option.value = year;
+    option.textContent = year;
+    // 如果是今年，預設選取它
+    if (year === currentYear) {
+      option.selected = true;
+    }
+    yearSelect.appendChild(option);
+  }
 });
+});
+
