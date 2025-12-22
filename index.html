@@ -307,10 +307,8 @@
             <h2>Budget Planner</h2>
             <div class="header-actions">
               <select id="budget-year">
-                <option>2025</option>
-                <option>2024</option>
-                <!-- JS 动态添加 -->
-              </select>
+  <!-- 年份將由 JS 自動產生（包含目前年份 2025 前後各 5 年） -->
+</select>
               <select id="budget-month">
                 <option value="1">January</option>
                 <option value="2">February</option>
@@ -899,6 +897,29 @@
           }
         }
       })();
+      <script>
+  // 自動產生 Budget Planner 年份選單（解決錯亂 + 每年自動更新）
+  document.addEventListener('DOMContentLoaded', function() {
+    const yearSelect = document.getElementById('budget-year');
+    if (!yearSelect) return;
+
+    const currentYear = new Date().getFullYear(); // 自動取得目前年份（現在是 2025）
+    const startYear = currentYear - 5; // 前 5 年
+    const endYear = currentYear + 5;   // 後 5 年（可自行調整）
+
+    // 從新到舊加入（最新年在最上面）
+    for (let year = endYear; year >= startYear; year--) {
+      const option = document.createElement('option');
+      option.value = year;
+      option.textContent = year;
+      if (year === currentYear) {
+        option.selected = true; // 目前年份預設選取
+      }
+      yearSelect.appendChild(option);
+    }
+  });
+</script>
     </script>
   </body>
 </html>
+
