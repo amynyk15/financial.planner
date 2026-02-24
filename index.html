@@ -1,924 +1,147 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Financial Planner & Shopping List</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <link rel="stylesheet" href="styles_8.css" />
-  </head>
-  <body>
-    <!-- 顶部导航栏 -->
-    <header class="top-nav">
-      <div class="logo">
-        <i class="fas fa-wallet"></i>
-        <h1>Finance Planner</h1>
-      </div>
-      <div class="user-profile">
-        <img
-          src="https://via.placeholder.com/40"
-          alt="User"
-          class="avatar"
-          id="user-avatar"
-        />
-        <span id="user-name">Stefania Nord</span>
-        <i class="fas fa-chevron-down"></i>
-      </div>
-    </header>
+<html lang="zh-HK" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FinPlan - 財務規劃器 (60-10-30 版)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; background: #0f0f1a; color: #e5e7eb; }
+    .purple-gradient { background: linear-gradient(135deg, #8b5cf6, #c084fc); }
+    .card { background: #1e1e2e; border-radius: 1rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3); }
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-[#0f0f1a] to-[#1a1a2e]">
 
-    <div class="main-container">
-      <!-- 侧边栏 -->
-      <aside class="sidebar">
-        <nav class="sidebar-menu">
-          <a href="#dashboard" class="active">
-            <i class="fas fa-home"></i>
-            <span>Dashboard</span>
-          </a>
-          <a href="#budget">
-            <i class="fas fa-calculator"></i>
-            <span>Budget Planner</span>
-          </a>
-          <a href="#expenses">
-            <i class="fas fa-receipt"></i>
-            <span>Transaction Record</span>
-          </a>
-          <a href="#savings">
-            <i class="fas fa-piggy-bank"></i>
-            <span>Saving Goals</span>
-          </a>
-          <a href="#shopping">
-            <i class="fas fa-shopping-cart"></i>
-            <span>Shopping List</span>
-          </a>
-          <a href="#accounts">
-            <!-- 新增链接到Accounts页面 -->
-            <i class="fas fa-university"></i>
-            <span>Accounts</span>
-          </a>
-          <a href="#bills">
-            <!-- 新增：Bill Payment Tracker导航 -->
-            <i class="fas fa-file-invoice-dollar"></i>
-            <span>Bill Tracker</span>
-          </a>
-          <a href="#settings">
-            <i class="fas fa-cog"></i>
-            <span>Settings</span>
-          </a>
-        </nav>
+  <!-- Sidebar -->
+  <div class="fixed inset-y-0 left-0 w-64 bg-[#1a1a2e] border-r border-[#2d2d44] p-6 flex flex-col">
+    <div class="flex items-center mb-10">
+      <div class="w-10 h-10 purple-gradient rounded-full flex items-center justify-center text-white font-bold text-xl">F</div>
+      <span class="ml-3 text-2xl font-bold">FinPlan</span>
+    </div>
+    <nav class="space-y-2">
+      <a href="#" class="flex items-center px-4 py-3 bg-[#2d2d44] rounded-lg text-purple-400 font-medium"><svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a8 8 0 100 16 8 8 0 000-16z"/></svg> Dashboard</a>
+      <a href="#" class="flex items-center px-4 py-3 hover:bg-[#2d2d44] rounded-lg"><svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4h12v12H4z"/></svg> Transactions</a>
+      <a href="#" class="flex items-center px-4 py-3 hover:bg-[#2d2d44] rounded-lg"><svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 11H9v-2h2v2zm0-4H9V7h2v2z"/></svg> Budget</a>
+      <a href="#" class="flex items-center px-4 py-3 hover:bg-[#2d2d44] rounded-lg"><svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zm0 8a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5z"/></svg> Goals</a>
+      <a href="#" class="flex items-center px-4 py-3 hover:bg-[#2d2d44] rounded-lg"><svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/></svg> Analytics</a>
+    </nav>
+  </div>
 
-        <!-- 侧边栏底部卡片 -->
-        <div class="sidebar-card">
-          <div class="card-header">
-            <i class="fas fa-chart-line"></i>
-            <span>Financial Overview</span>
+  <!-- Main Content -->
+  <div class="ml-64 p-8">
+    <!-- Welcome Header -->
+    <div class="flex justify-between items-center mb-8">
+      <div>
+        <h1 class="text-3xl font-bold">Welcome back, Yin Kwan!</h1>
+        <p class="text-gray-400">是時候管理你的 60-10-30 財務計劃啦～</p>
+      </div>
+      <div class="flex items-center space-x-4">
+        <button class="px-4 py-2 bg-[#2d2d44] rounded-lg hover:bg-[#3a3a55]">Manage widgets</button>
+        <button class="px-4 py-2 purple-gradient text-white rounded-lg font-medium">+ Add widget</button>
+        <img src="https://ui-avatars.com/api/?name=Yin+Kwan&background=8b5cf6&color=fff" alt="Avatar" class="w-10 h-10 rounded-full">
+      </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <div class="card p-6">
+        <p class="text-gray-400 text-sm">Total Balance</p>
+        <p class="text-3xl font-bold mt-2">$15,700</p>
+        <p class="text-green-400 text-sm mt-1">↑ 12.3% vs last month</p>
+      </div>
+      <div class="card p-6">
+        <p class="text-gray-400 text-sm">Income</p>
+        <p class="text-3xl font-bold mt-2">$15,000</p>
+        <p class="text-green-400 text-sm mt-1">↑ vs last month</p>
+      </div>
+      <div class="card p-6">
+        <p class="text-gray-400 text-sm">Expense</p>
+        <p class="text-3xl font-bold mt-2">$6,222</p>
+        <p class="text-red-400 text-sm mt-1">↑ 2.4% vs last month</p>
+      </div>
+      <div class="card p-6">
+        <p class="text-gray-400 text-sm">Total Savings</p>
+        <p class="text-3xl font-bold mt-2">$32,913</p>
+        <p class="text-green-400 text-sm mt-1">↑ 12.1% vs last month</p>
+      </div>
+    </div>
+
+    <!-- Money Flow Chart & Budget -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+      <div class="card p-6">
+        <h2 class="text-xl font-semibold mb-4">Money Flow (60-10-30)</h2>
+        <canvas id="moneyFlowChart" height="200"></canvas>
+      </div>
+      <div class="card p-6">
+        <h2 class="text-xl font-semibold mb-4">Budget (Monthly $15,000)</h2>
+        <div class="flex justify-center">
+          <div class="relative w-48 h-48">
+            <svg class="w-full h-full" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="40" fill="none" stroke="#2d2d44" stroke-width="12"/>
+              <circle cx="50" cy="50" r="40" fill="none" stroke="#8b5cf6" stroke-width="12" stroke-dasharray="251.3" stroke-dashoffset="50" transform="rotate(-90 50 50)"/>
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center">
+              <p class="text-3xl font-bold">$5,950</p>
+              <p class="text-sm text-gray-400">used of $15,000</p>
+            </div>
           </div>
-          <div class="card-stats">
-            <div class="stat-item">
-              <p>Total Income</p>
-              <p class="value" id="sidebar-total-income">$8,961</p>
-            </div>
-            <div class="stat-item">
-              <p>Total Expenses</p>
-              <p class="value" id="sidebar-total-expenses">$6,941.5</p>
-            </div>
-            <div class="stat-item">
-              <p>Balance</p>
-              <p class="value" id="sidebar-balance">$1,978.5</p>
-            </div>
-          </div>
-          <button class="card-btn">View Details</button>
         </div>
-      </aside>
-
-      <!-- 主内容区 -->
-      <main class="content-area">
-        <!-- Dashboard 区域 -->
-        <section id="dashboard" class="page active">
-          <div class="page-header">
-            <h2>Dashboard</h2>
-            <div class="header-actions">
-              <div class="date-filter">
-  <i class="fas fa-calendar"></i>
-  <select id="dashboard-date-select">
-    <!-- 選項將由 JS 動態生成 -->
-  </select>
-</div>
-              <button class="btn primary-btn">
-                <i class="fas fa-plus"></i>
-                Add Transaction
-              </button>
-            </div>
-          </div>
-
-          <!-- 第一行卡片 -->
-          <div class="row cards-row">
-            <!-- 总余额卡片 -->
-            <div class="card balance-card">
-              <div class="card-header">
-                <h3>Overall Balance</h3>
-                <i class="fas fa-ellipsis-v"></i>
-              </div>
-              <div class="card-body">
-                <p class="balance" id="dashboard-balance">$17,871</p>
-                <div class="trend positive">
-                  <i class="fas fa-arrow-up"></i>
-                  <span>12% from last month</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- 信用卡卡片 -->
-            <div class="card credit-card" id="credit-card-container">
-              <div class="card-header">
-                <span>Credit Card</span>
-                <span class="visa" id="card-type">VISA</span>
-                <!-- 修改：id用于动态更新类型 -->
-              </div>
-              <div class="card-body">
-                <h4 id="card-holder">Stefania Nord</h4>
-                <p class="card-number" id="card-number">•••• •••• •••• 7899</p>
-                <div class="card-footer">
-                  <p class="expiry" id="card-expiry">05/24</p>
-                  <p class="card-balance" id="card-balance">$1,425</p>
-                </div>
-              </div>
-              <button class="btn small-btn edit-credit-card">
-                <i class="fas fa-edit"></i> Edit Card
-              </button>
-            </div>
-          </div>
-
-          <!-- 信用卡表单（默认隐藏） -->
-          <div class="credit-form card hidden" id="credit-form">
-            <div class="form-header">
-              <h3>Edit Credit Card</h3>
-              <button class="close-form"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="form-group">
-              <label>Card Holder Name</label>
-              <input
-                type="text"
-                id="credit-holder"
-                placeholder="e.g. Stefania Nord"
-              />
-            </div>
-            <div class="form-group">
-              <label>Card Number</label>
-              <input
-                type="text"
-                id="credit-number"
-                placeholder="•••• •••• •••• ••••"
-                maxlength="19"
-              />
-            </div>
-            <div class="form-group">
-              <label>Card Type</label>
-              <!-- 新增：选择Visa或Master -->
-              <select id="credit-type">
-                <option value="VISA">VISA</option>
-                <option value="Master">Master</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Expiry Date</label>
-              <input type="text" id="credit-expiry" placeholder="MM/YY" />
-            </div>
-            <div class="form-group">
-              <label>Balance ($)</label>
-              <input type="number" id="credit-balance" placeholder="0.00" />
-            </div>
-            <button class="btn primary-btn save-credit">
-              <i class="fas fa-save"></i> Save Card
-            </button>
-          </div>
-
-          <!-- 第二行内容 -->
-          <div class="row content-row">
-            <!-- 左侧：账户 + 交易 -->
-            <div class="col left-col">
-              <!-- 账户列表 -->
-              <div class="card accounts-card">
-                <div class="card-header">
-                  <h3>Other Accounts</h3>
-                  <a href="#accounts" class="show-more">Manage Accounts</a>
-                  <!-- 修改：链接到#accounts -->
-                </div>
-                <div class="accounts-list" id="dashboard-accounts-list">
-                  <!-- 添加id用于动态渲染 -->
-                  <!-- 通过JS动态渲染 -->
-                </div>
-              </div>
-
-              <!-- 最近交易 -->
-              <div class="card transactions-card">
-                <div class="card-header">
-                  <h3>Last Transactions</h3>
-                  <div class="transaction-filters">
-                    <select>
-                      <option>16-23/05/22</option>
-                    </select>
-                    <select>
-                      <option>All accounts</option>
-                    </select>
-                    <select>
-                      <option>All categories</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="transactions-list" id="dashboard-transactions-list">
-                  <!-- 添加id用于动态渲染 -->
-                  <!-- 通过JS动态渲染最近交易，与Actual Expenses同步 -->
-                </div>
-                <a href="#expenses" class="show-more">Show more</a>
-                <!-- 修改：链接到#expenses -->
-              </div>
-            </div>
-
-            <!-- 右侧：储蓄目标 + Upcoming Bills + 支出图表 -->
-            <div class="col right-col">
-              <!-- 储蓄目标 -->
-              <div class="card goals-card">
-                <div class="card-header">
-                  <h3>Goals</h3>
-                  <button class="btn small-btn">
-                    <i class="fas fa-plus"></i> Add new
-                  </button>
-                </div>
-                <div class="goals-list" id="dashboard-goals-list">
-                  <!-- 同步自 Saving Goals -->
-                </div>
-                <a href="#savings" class="show-more">Show more</a>
-                <!-- 修改：链接到#savings -->
-              </div>
-
-              <!-- 新增：Upcoming Bills 快速概览小卡片 -->
-              <div class="card upcoming-bills-card">
-                <div class="card-header">
-                  <h3>Upcoming Bills</h3>
-                  <a href="#bills" class="show-more">View All</a>
-                </div>
-                <div class="upcoming-bills-list" id="dashboard-upcoming-bills">
-                  <!-- 通过JS动态渲染即将到期的未付帐单 -->
-                </div>
-              </div>
-
-              <!-- 支出图表 -->
-              <div class="card chart-card">
-                <div class="card-header">
-                  <h3>Expenditure Review</h3>
-                  <div class="chart-filters">
-                    <select>
-                      <option>Monthly</option>
-                      <option>Weekly</option>
-                      <option>Daily</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="chart-summary">
-                  <div class="summary-item">
-                    <p>Balance</p>
-                    <p class="value" id="chart-balance">$1,978.5</p>
-                  </div>
-                  <div class="summary-item">
-                    <p>Income</p>
-                    <p class="value" id="chart-income">$8,961</p>
-                  </div>
-                  <div class="summary-item">
-                    <p>Expenses</p>
-                    <p class="value" id="chart-expenses">$6,941.5</p>
-                  </div>
-                </div>
-                <div class="chart-container">
-                  <canvas id="expenseChart"></canvas>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Budget Planner 区域 -->
-        <section id="budget" class="page">
-          <div class="page-header">
-            <h2>Budget Planner</h2>
-            <div class="header-actions">
-              <select id="budget-year">
-  <!-- 年份將由 JS 自動產生（包含目前年份 2025 前後各 5 年） -->
-</select>
-              <select id="budget-month">
-                <option value="1">January</option>
-                <option value="2">February</option>
-                <option value="3">March</option>
-                <option value="4">April</option>
-                <option value="5">May</option>
-                <option value="6">June</option>
-                <option value="7">July</option>
-                <option value="8">August</option>
-                <option value="9">September</option>
-                <option value="10">October</option>
-                <option value="11">November</option>
-                <option value="12">December</option>
-              </select>
-              <button class="btn primary-btn">
-                <i class="fas fa-save"></i>
-                Save Budget
-              </button>
-            </div>
-          </div>
-
-          <div class="budget-container">
-            <div class="budget-section">
-              <h3>Income</h3>
-              <div class="form-group">
-                <label>Source</label>
-                <input type="text" placeholder="e.g. Salary, Freelance" />
-              </div>
-              <div class="form-group">
-                <label>Amount ($)</label>
-                <input type="number" placeholder="0.00" />
-              </div>
-              <button class="btn secondary-btn add-income">
-                <i class="fas fa-plus"></i> Add Income
-              </button>
-              <div class="income-list">
-                <!-- 收入项会通过JS添加 -->
-              </div>
-            </div>
-
-            <div class="budget-section">
-              <h3>Expenses</h3>
-              <div class="form-group">
-                <label>Category</label>
-                <select id="expense-category-select">
-                  <!-- 添加id用于动态加载自定义类别 -->
-                  <option>Cafes & Restaurants</option>
-                  <option>Groceries</option>
-                  <option>Transport</option>
-                  <option>Entertainment</option>
-                  <option>Utilities</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label>Amount ($)</label>
-                <input type="number" placeholder="0.00" />
-              </div>
-              <button class="btn secondary-btn add-expense">
-                <i class="fas fa-plus"></i> Add Expense
-              </button>
-              <div class="expense-list">
-                <!-- 支出项会通过JS添加 -->
-              </div>
-            </div>
-
-            <div class="budget-summary">
-              <h3>Budget Summary</h3>
-              <div class="summary-row">
-                <p>Total Income</p>
-                <p id="total-income">$0.00</p>
-              </div>
-              <div class="summary-row">
-                <p>Total Expenses</p>
-                <p id="total-expenses">$0.00</p>
-              </div>
-              <div class="summary-row">
-                <p>Projected Savings</p>
-                <p id="projected-savings">$0.00</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Actual Expenses 区域 -->
-        <section id="expenses" class="page">
-          <div class="page-header">
-            <h2>Transaction Record</h2>
-            <button class="btn primary-btn" id="add-transaction-btn">
-              <i class="fas fa-plus"></i>
-              Add Transaction
-            </button>
-          </div>
-
-          <!-- 交易表单（默认隐藏） -->
-          <div class="transaction-form card hidden">
-            <div class="form-header">
-              <h3>Add New Transaction</h3>
-              <button class="close-form"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label>Date</label>
-                <input type="date" id="transaction-date" />
-              </div>
-              <div class="form-group">
-                <label>Type</label>
-                <select id="transaction-type">
-                  <option value="income">Income</option>
-                  <option value="expense">Expense</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label>Description</label>
-                <input
-                  type="text"
-                  id="transaction-desc"
-                  placeholder="e.g. Groceries, Salary"
-                />
-              </div>
-              <div class="form-group">
-                <label>Category</label>
-                <select id="transaction-category">
-                  <option>Cafes & Restaurants</option>
-                  <option>Groceries</option>
-                  <option>Transport</option>
-                  <option>Entertainment</option>
-                  <option>Utilities</option>
-                  <option>Salary</option>
-                  <option>Freelance</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label>Account</label>
-                <select id="transaction-account">
-                  <option>Salary</option>
-                  <option>Virtual cash account</option>
-                  <option>Credit Card</option>
-                  <option>Savings</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label>Amount ($)</label>
-                <input
-                  type="number"
-                  id="transaction-amount"
-                  placeholder="0.00"
-                />
-              </div>
-            </div>
-            <button class="btn primary-btn save-transaction">
-              <i class="fas fa-save"></i> Save Transaction
-            </button>
-          </div>
-
-          <!-- 实际交易列表 -->
-          <div class="card transactions-table-card">
-            <div class="card-header">
-              <h3>Transaction History</h3>
-              <div class="table-filters">
-                <input type="text" placeholder="Search transactions..." />
-                <select>
-                  <option>All Transactions</option>
-                  <option>Income Only</option>
-                  <option>Expenses Only</option>
-                </select>
-              </div>
-            </div>
-            <div class="transactions-table">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Description</th>
-                    <th>Category</th>
-                    <th>Account</th>
-                    <th>Amount</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="actual-transactions-list">
-                  <!-- 交易记录会通过JS添加 -->
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-
-        <!-- Saving Goals 区域 -->
-        <section id="savings" class="page">
-          <div class="page-header">
-            <h2>Saving Goal Tracker</h2>
-            <button class="btn primary-btn" id="add-goal-btn">
-              <i class="fas fa-plus"></i>
-              Add New Goal
-            </button>
-          </div>
-
-          <!-- 目标表单（默认隐藏） -->
-          <div class="goal-form card hidden">
-            <div class="form-header">
-              <h3>Add Saving Goal</h3>
-              <button class="close-form"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="form-group">
-              <label>Goal Name</label>
-              <input
-                type="text"
-                id="goal-name"
-                placeholder="e.g. Buy a car, Vacation"
-              />
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label>Target Amount ($)</label>
-                <input type="number" id="goal-target" placeholder="0.00" />
-              </div>
-              <div class="form-group">
-                <label>Current Savings ($)</label>
-                <input type="number" id="goal-current" placeholder="0.00" />
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Deadline (Optional)</label>
-              <input type="date" id="goal-deadline" />
-            </div>
-            <button class="btn primary-btn save-goal">
-              <i class="fas fa-save"></i> Save Goal
-            </button>
-          </div>
-
-          <!-- 目标列表 -->
-          <div class="goals-grid">
-            <!-- 目标卡片会通过JS添加 -->
-            <div class="goal-card">
-              <div class="progress-circle" style="--progress: 70%">70%</div>
-              <div class="goal-details">
-                <h3>Buy a car !</h3>
-                <p class="target">Target: $9,500</p>
-                <p class="saved">Saved: $6,080</p>
-                <div class="progress-bar">
-                  <div class="progress-fill" style="width: 70%"></div>
-                </div>
-                <div class="goal-actions">
-                  <button class="btn small-btn edit-goal">
-                    <i class="fas fa-edit"></i> Edit
-                  </button>
-                  <button class="btn small-btn delete-goal">
-                    <i class="fas fa-trash"></i> Delete
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div class="goal-card">
-              <div class="progress-circle" style="--progress: 45%">45%</div>
-              <div class="goal-details">
-                <h3>Vacation</h3>
-                <p class="target">Target: $4,000</p>
-                <p class="saved">Saved: $1,800</p>
-                <div class="progress-bar">
-                  <div class="progress-fill" style="width: 45%"></div>
-                </div>
-                <div class="goal-actions">
-                  <button class="btn small-btn edit-goal">
-                    <i class="fas fa-edit"></i> Edit
-                  </button>
-                  <button class="btn small-btn delete-goal">
-                    <i class="fas fa-trash"></i> Delete
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Shopping List 区域 -->
-        <section id="shopping" class="page">
-          <div class="page-header">
-            <h2>Shopping List</h2>
-            <div class="header-actions">
-              <button class="btn primary-btn" id="create-folder-btn">
-                <i class="fas fa-folder-plus"></i>
-                Create Folder
-              </button>
-              <button class="btn primary-btn" id="add-product-btn">
-                <i class="fas fa-plus"></i>
-                Add Product
-              </button>
-              <button class="btn primary-btn" id="toggle-main-list">
-                <!-- 新增：拉出主页面按钮 -->
-                <i class="fas fa-list"></i>
-                Toggle Main List
-              </button>
-            </div>
-          </div>
-
-          <!-- 商品表单（默认隐藏） -->
-          <div class="product-form card hidden">
-            <div class="form-header">
-              <h3>Add New Product</h3>
-              <button class="close-form"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label>Product Name</label>
-                <input
-                  type="text"
-                  id="product-name"
-                  placeholder="e.g. Laptop, Milk"
-                />
-              </div>
-              <div class="form-group">
-                <label>Category</label>
-                <input
-                  type="text"
-                  id="product-category"
-                  placeholder="e.g. Electronics, Groceries"
-                />
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label>Price ($)</label>
-                <input type="number" id="product-price" placeholder="0.00" />
-              </div>
-              <div class="form-group">
-                <label>Quantity</label>
-                <input
-                  type="number"
-                  id="product-qty"
-                  placeholder="1"
-                  min="1"
-                  value="1"
-                />
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Product Photo (Optional)</label>
-              <input type="file" id="product-photo" accept="image/*" />
-              <div class="photo-preview" id="photo-preview"></div>
-            </div>
-            <button class="btn primary-btn save-product">
-              <i class="fas fa-save"></i> Save Product
-            </button>
-          </div>
-
-          <!-- 购物清单 -->
-          <div class="shopping-grid">
-            <!-- 商品卡片和文件夹会通过JS添加 -->
-          </div>
-
-          <!-- 新增: 文件夹详细视图（默认隐藏） -->
-          <div class="folder-view hidden">
-            <div class="page-header">
-              <h2 id="folder-view-title">Folder Details</h2>
-              <button class="btn primary-btn return-to-main">
-                <i class="fas fa-arrow-left"></i> Back to Main
-              </button>
-            </div>
-            <div class="folder-products-grid">
-              <!-- 文件夹内详细产品卡片会通过JS添加 -->
-            </div>
-          </div>
-        </section>
-
-        <!-- Accounts 区域 (新增页面，用于管理Other Accounts) -->
-        <section id="accounts" class="page">
-          <div class="page-header">
-            <h2>Manage Accounts</h2>
-            <button class="btn primary-btn" id="add-account-btn">
-              <i class="fas fa-plus"></i>
-              Add Account
-            </button>
-          </div>
-
-          <!-- 添加账户表单（默认隐藏） -->
-          <div class="account-form card hidden" id="account-form">
-            <div class="form-header">
-              <h3>Add/Edit Account</h3>
-              <button class="close-form"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="form-group">
-              <label>Account Name</label>
-              <input type="text" id="account-name" placeholder="e.g. Salary" />
-            </div>
-            <div class="form-group">
-              <label>Account Number</label>
-              <input type="text" id="account-number" placeholder="••••• 2305" />
-            </div>
-            <div class="form-group">
-              <label>Balance ($)</label>
-              <input type="number" id="account-balance" placeholder="0.00" />
-            </div>
-            <button class="btn primary-btn save-account">
-              <i class="fas fa-save"></i> Save Account
-            </button>
-          </div>
-
-          <!-- 账户列表 -->
-          <div class="card accounts-card">
-            <div class="accounts-list" id="accounts-list">
-              <!-- 通过JS动态渲染 -->
-            </div>
-          </div>
-        </section>
-
-        <!-- 新增：Bill Payment Tracker 区域 -->
-        <section id="bills" class="page">
-          <div class="page-header">
-            <h2>Bill Payment Tracker</h2>
-            <button class="btn primary-btn" id="add-bill-btn">
-              <i class="fas fa-plus"></i>
-              Add Bill
-            </button>
-          </div>
-
-          <!-- 帐单表单（默认隐藏） -->
-          <div class="bill-form card hidden">
-            <div class="form-header">
-              <h3>Add/Edit Bill</h3>
-              <button class="close-form"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="form-group">
-              <label>Bill Name</label>
-              <input
-                type="text"
-                id="bill-name"
-                placeholder="e.g. Electricity Bill"
-              />
-            </div>
-            <div class="form-group">
-              <label>Due Date</label>
-              <input type="date" id="bill-due-date" />
-            </div>
-            <div class="form-group">
-              <label>Amount ($)</label>
-              <input type="number" id="bill-amount" placeholder="0.00" />
-            </div>
-            <div class="form-group">
-              <label>Paid?</label>
-              <input type="checkbox" id="bill-paid" />
-            </div>
-            <button class="btn primary-btn save-bill">
-              <i class="fas fa-save"></i> Save Bill
-            </button>
-          </div>
-
-          <!-- 帐单列表 -->
-          <div class="bills-grid" id="bills-list">
-            <!-- 通过JS动态渲染 -->
-          </div>
-        </section>
-
-        <!-- Settings 区域 -->
-        <section id="settings" class="page">
-          <div class="page-header">
-            <h2>Settings</h2>
-          </div>
-          <div class="card settings-card">
-            <h3>User Profile</h3>
-            <div class="form-group">
-              <label>User Name</label>
-              <input
-                type="text"
-                id="settings-name"
-                placeholder="Enter your name"
-              />
-            </div>
-            <div class="form-group">
-              <label>User Icon</label>
-              <input type="file" id="settings-icon" accept="image/*" />
-              <div class="photo-preview" id="settings-preview"></div>
-            </div>
-            <button class="btn primary-btn save-settings">
-              <i class="fas fa-save"></i> Save Changes
-            </button>
-          </div>
-
-          <!-- 新增：自定义子类别功能 -->
-          <div class="card settings-card">
-            <h3>Custom Sub-Categories</h3>
-            <div class="form-group">
-              <label>Type</label>
-              <select id="category-type">
-                <option value="income">Income</option>
-                <option value="expenses">Expenses</option>
-                <option value="savings">Savings</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Sub-Category Name</label>
-              <input
-                type="text"
-                id="sub-category-name"
-                placeholder="e.g. Bonus, Rent"
-              />
-            </div>
-            <button class="btn primary-btn add-sub-category">
-              <i class="fas fa-plus"></i> Add Sub-Category
-            </button>
-            <div class="category-lists">
-              <h4>Income Sub-Categories</h4>
-              <ul id="income-categories-list"></ul>
-              <h4>Expenses Sub-Categories</h4>
-              <ul id="expenses-categories-list"></ul>
-              <h4>Savings Sub-Categories</h4>
-              <ul id="savings-categories-list"></ul>
-            </div>
-            <!-- 新增：資料匯出 / 匯入功能 -->
-            <div class="card settings-card">
-              <h3>Data Backup</h3>
-              <p style="margin-bottom: 1rem; color: var(--gray-600)">
-                Export your data as a JSON file for backup, or import a
-                previously saved file to restore.
-              </p>
-              <div class="form-row" style="gap: 1rem; flex-wrap: wrap">
-                <button class="btn primary-btn" id="export-data-btn">
-                  <i class="fas fa-download"></i> Export Data
-                </button>
-                <label class="btn secondary-btn" style="cursor: pointer">
-                  <i class="fas fa-upload"></i> Import Data
-                  <input
-                    type="file"
-                    id="import-data-input"
-                    accept=".json"
-                    style="display: none"
-                  />
-                </label>
-              </div>
-              <p
-                id="import-status"
-                style="
-                  margin-top: 1rem;
-                  font-size: 0.875rem;
-                  color: var(--gray-500);
-                "
-              ></p>
-            </div>
-          </div>
-        </section>
-      </main>
+        <div class="mt-6 space-y-3">
+          <div class="flex justify-between text-sm"><span>60% Necessities</span><span>$9,000</span></div>
+          <div class="flex justify-between text-sm"><span>10% Enjoyment</span><span>$1,500</span></div>
+          <div class="flex justify-between text-sm"><span>30% Savings/Invest</span><span>$4,500</span></div>
+        </div>
+      </div>
     </div>
 
-    <!-- 图片放大弹窗 -->
-    <div class="image-modal" id="imageModal">
-      <span class="close-modal">&times;</span>
-      <img class="modal-content" id="modalImage" />
+    <!-- Recent Transactions & Goals -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="card p-6">
+        <h2 class="text-xl font-semibold mb-4">Recent Transactions</h2>
+        <table class="w-full text-sm">
+          <thead><tr class="text-gray-400"><th class="py-2 text-left">Date</th><th>Amount</th><th>Name</th><th>Category</th></tr></thead>
+          <tbody>
+            <tr class="border-t border-[#2d2d44]"><td class="py-3">25 Jul</td><td class="text-red-400">-$10</td><td>YouTube</td><td>Subscription</td></tr>
+            <tr class="border-t border-[#2d2d44]"><td class="py-3">26 Jul</td><td class="text-red-400">-$150</td><td>Reserved</td><td>Shopping</td></tr>
+            <tr class="border-t border-[#2d2d44]"><td class="py-3">27 Jul</td><td class="text-red-400">-$80</td><td>Yaposhka</td><td>Cafe</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card p-6">
+        <h2 class="text-xl font-semibold mb-4">Saving Goals</h2>
+        <div class="space-y-6">
+          <div>
+            <div class="flex justify-between mb-1"><span>MacBook Pro</span><span>7%</span></div>
+            <div class="w-full bg-[#2d2d44] rounded-full h-2.5"><div class="purple-gradient h-2.5 rounded-full" style="width:7%"></div></div>
+            <p class="text-sm text-gray-400 mt-1">$1,650 / $20,000</p>
+          </div>
+          <div>
+            <div class="flex justify-between mb-1"><span>New Car</span><span>42%</span></div>
+            <div class="w-full bg-[#2d2d44] rounded-full h-2.5"><div class="purple-gradient h-2.5 rounded-full" style="width:42%"></div></div>
+            <p class="text-sm text-gray-400 mt-1">$25,200 / $60,000</p>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="script_8.js"></script>
-    <script>
-      (function () {
-        function c() {
-          var b = a.contentDocument || a.contentWindow.document;
-          if (b) {
-            var d = b.createElement("script");
-            d.innerHTML =
-              "window.__CF$cv$params={r:'9b143cb23f16850c',t:'MTc2NjI4NzE1OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";
-            b.getElementsByTagName("head")[0].appendChild(d);
-          }
-        }
-        if (document.body) {
-          var a = document.createElement("iframe");
-          a.height = 1;
-          a.width = 1;
-          a.style.position = "absolute";
-          a.style.top = 0;
-          a.style.left = 0;
-          a.style.border = "none";
-          a.style.visibility = "hidden";
-          document.body.appendChild(a);
-          if ("loading" !== document.readyState) c();
-          else if (window.addEventListener)
-            document.addEventListener("DOMContentLoaded", c);
-          else {
-            var e = document.onreadystatechange || function () {};
-            document.onreadystatechange = function (b) {
-              e(b);
-              "loading" !== document.readyState &&
-                ((document.onreadystatechange = e), c());
-            };
-          }
-        }
-      })();
-      <script>
-  // 自動產生 Budget Planner 年份選單（解決錯亂 + 每年自動更新）
-  document.addEventListener('DOMContentLoaded', function() {
-    const yearSelect = document.getElementById('budget-year');
-    if (!yearSelect) return;
-
-    const currentYear = new Date().getFullYear(); // 自動取得目前年份（現在是 2025）
-    const startYear = currentYear - 5; // 前 5 年
-    const endYear = currentYear + 5;   // 後 5 年（可自行調整）
-
-    // 從新到舊加入（最新年在最上面）
-    for (let year = endYear; year >= startYear; year--) {
-      const option = document.createElement('option');
-      option.value = year;
-      option.textContent = year;
-      if (year === currentYear) {
-        option.selected = true; // 目前年份預設選取
-      }
-      yearSelect.appendChild(option);
-    }
-  });
-</script>
-    </script>
-  </body>
+  <script>
+    // Money Flow Chart (簡單柱狀圖模擬)
+    const ctx = document.getElementById('moneyFlowChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+        datasets: [
+          { label: 'Income', data: [8000, 8500, 8200, 9000, 9500, 8800, 10000], backgroundColor: '#10b981' },
+          { label: 'Expense', data: [6000, 6200, 5800, 6500, 7000, 6222, 6800], backgroundColor: '#ef4444' }
+        ]
+      },
+      options: { scales: { y: { beginAtZero: true } }, plugins: { legend: { labels: { color: '#e5e7eb' } } } }
+    });
+  </script>
+</body>
 </html>
-
-
